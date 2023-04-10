@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_ROW 4
-#define MAX_COL 4
+#define MAX_ROW 9
+#define MAX_COL 9
 #define MAX 10
 
 typedef struct POINT {
@@ -81,13 +81,52 @@ point_t deQueue(Queue *q) {
   return d;
 }
 
-/*bool checkCoordinate(int row, int col) {
+bool checkCoordinate(int row, int col) {
   bool ret = false;
-  if ((0 <= row < MAX_ROW) && (0 <= col < MAX_COL)) {
+  if ((0 <= matrix[row][col].row < MAX_ROW) &&
+      (0 <= matrix[row][col].column < MAX_COL)) {
     ret = true;
   }
   return ret;
-}*/
+}
+
+void findSurroundingPoint(int rows, int cols, point_t SurroundingPnt[4],
+                          int *count) {
+  int tempCount = 0;
+  if ((checkCoordinate(rows, cols + 1) == true) &&
+      (matrix[rows][cols + 1].value == 1)) {
+
+    SurroundingPnt[tempCount] = matrix[rows][cols + 1];
+    tempCount++;
+  }
+  if ((checkCoordinate(rows + 1, cols) == true) &&
+      (matrix[rows + 1][cols].value == 1)) {
+    SurroundingPnt[tempCount] = matrix[rows + 1][cols];
+    tempCount++;
+  }
+  if ((checkCoordinate(rows, cols - 1) == true) &&
+      (matrix[rows][cols - 1].value == 1)) {
+    SurroundingPnt[tempCount] = matrix[rows][cols - 1];
+    tempCount++;
+  }
+  if ((checkCoordinate(rows - 1, cols) == true) &&
+      (matrix[rows - 1][cols].value == 1)) {
+    SurroundingPnt[tempCount] = matrix[rows - 1][cols];
+    tempCount++;
+  }
+  *count = tempCount;
+}
+
+void findShortestPath(int rows, int cols) {
+  Queue queue;
+  initQueue(&queue);
+  matrix[0][0].visited = true;
+  enQueue(&queue, matrix[0][0]);
+  bool found = false;
+  while ((isEmpty(queue) == false) && (found == false)) {
+    deQueue(&queue);
+  }
+}
 
 int main() {
   inputMatrixData();
