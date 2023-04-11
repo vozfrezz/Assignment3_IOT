@@ -15,14 +15,20 @@ typedef struct POINT {
 } point_t;
 
 point_t matrix[MAX_ROW][MAX_COL];
-
 void inputMatrixData() {
+  int data[MAX_ROW][MAX_COL] = {
+      {1, 1, 0, 1, 1, 0, 1, 1, 0}, {1, 1, 0, 1, 0, 0, 1, 1, 0},
+      {0, 1, 1, 0, 0, 1, 1, 0, 0}, {1, 1, 0, 1, 1, 1, 1, 1, 0},
+      {1, 1, 0, 1, 1, 0, 1, 1, 0}, {1, 0, 1, 1, 1, 0, 1, 1, 0},
+      {0, 1, 1, 0, 1, 0, 1, 1, 0}, {1, 1, 0, 1, 0, 1, 1, 1, 0},
+  };
   for (int i = 0; i < MAX_ROW; i++) {
     for (int j = 0; j < MAX_COL; j++) {
-      printf("\n Enter value of matrix[%d][%d](0 or 1): ", i, j);
-      scanf("%d", &matrix[i][j].value);
       matrix[i][j].row = i;
       matrix[i][j].column = j;
+      matrix[i][j].value = data[i][j];
+      matrix[i][j].visited = false;
+      matrix[i][j].prev = NULL;
     }
   }
 }
@@ -123,16 +129,16 @@ void findShortestPath(int rows, int cols) {
   matrix[0][0].visited = true;
   enQueue(&queue, matrix[0][0]);
   bool found = false;
+  point_t current;
   while ((isEmpty(queue) == false) && (found == false)) {
-    deQueue(&queue);
+    current = deQueue(&queue);
     point_t arround[4];
     int count;
-    findSurroundingPoint(deQueue(&queue).row, deQueue(&queue).column, arround,
-                         &count);
+    findSurroundingPoint(current.row, current.column, arround, &count);
     for (int i = 0; i < count; i++) {
       if (arround[i].visited == false) {
         arround[i].visited = true;
-        arround[i].prev = &matrix[deQueue(&queue).row][deQueue(&queue).column];
+        arround[i].prev = &matrix[current.row][current.column];
         if (arround[i].row == rows && arround[i].column == cols) {
           found = true;
           break;
@@ -144,7 +150,6 @@ void findShortestPath(int rows, int cols) {
   }
   if (found == true) {
     printf("\n The coordinate points from O(0;0) to A(%d,%d)", rows, cols);
-    //....................................................................................................................................
   } else {
     printf("\nNot found path fromt O(0;0) to A(%d;%d)", rows, cols);
   }
@@ -153,5 +158,6 @@ void findShortestPath(int rows, int cols) {
 int main() {
   inputMatrixData();
   exportMatrixData();
+  findShortestPath(3, 3);
   return 0;
 }
