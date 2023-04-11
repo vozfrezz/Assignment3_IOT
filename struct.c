@@ -125,6 +125,28 @@ void findShortestPath(int rows, int cols) {
   bool found = false;
   while ((isEmpty(queue) == false) && (found == false)) {
     deQueue(&queue);
+    point_t arround[4];
+    int count;
+    findSurroundingPoint(deQueue(&queue).row, deQueue(&queue).column, arround,
+                         &count);
+    for (int i = 0; i < count; i++) {
+      if (arround[i].visited == false) {
+        arround[i].visited = true;
+        arround[i].prev = &matrix[deQueue(&queue).row][deQueue(&queue).column];
+        if (arround[i].row == rows && arround[i].column == cols) {
+          found = true;
+          break;
+        } else {
+          enQueue(&queue, matrix[arround[i].row][arround[i].column]);
+        }
+      }
+    };
+  }
+  if (found == true) {
+    printf("\n The coordinate points from O(0;0) to A(%d,%d)", rows, cols);
+    //....................................................................................................................................
+  } else {
+    printf("\nNot found path fromt O(0;0) to A(%d;%d)", rows, cols);
   }
 }
 
