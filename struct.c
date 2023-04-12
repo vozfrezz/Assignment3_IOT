@@ -192,9 +192,32 @@ void findShortestPath(int rows, int cols) {
   }
 }
 
-int main() {
+/*int main() {
   inputMatrixData();
   exportMatrixData();
   findShortestPath(2, 2);
+  return 0;
+}
+*/
+int main() {
+  inputMatrixData();
+  exportMatrixData();
+
+  int targetRow, targetCol;
+  bool isValid;
+
+  do {
+    printf("\nEnter the target point coordinates (row, col): ");
+    scanf("%d %d", &targetRow, &targetCol);
+
+    isValid = checkCoordinate(targetRow, targetCol);
+    if (!isValid) {
+      printf("Invalid coordinates: (%d, %d). Please try again.\n", targetRow,
+             targetCol);
+    }
+  } while (!isValid);
+
+  findShortestPath(targetRow, targetCol);
+
   return 0;
 }
