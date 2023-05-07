@@ -82,12 +82,18 @@ int isFull(Queue q) {
 }
 // Add an element to the queue
 void enQueue(Queue *q, point_t *x) {
-  if (isFull(*q)) {
-    printf("Error: Queue is full.\n");
-    return;
+  if (!isFull(*q)) {
+    if (q->rear == MAX - 1) {
+      for (int i = q->front; i <= q->rear; i++) {
+        q->data[i - q->front] = q->data[i];
+      }
+      q->rear = MAX - q->front - 1;
+
+      q->front = 0;
+    }
+    q->rear = q->rear + 1;
+    q->data[q->rear] = x;
   }
-  q->rear = q->rear + 1;
-  q->data[q->rear] = x;
 }
 
 // Remove an element from the queue
